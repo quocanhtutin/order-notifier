@@ -23,6 +23,8 @@ const db = admin.database();
 const ref = db.ref("OrderDetails");
 
 console.log("🚀 Listening for new orders...");
+console.log("🧪 sendToTopic exists:", typeof admin.messaging().sendToTopic);
+
 
 ref.on("child_added", async (snapshot) => {
   const order = snapshot.val();
