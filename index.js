@@ -23,7 +23,7 @@ const db = admin.database();
 const ref = db.ref("OrderDetails");
 
 console.log("🚀 Listening for new orders...");
-console.log("🧪 sendToTopic exists:", typeof admin.messaging().sendToTopic);
+console.log("🧪 send() exists:", typeof admin.messaging().send);
 
 
 ref.on("child_added", async (snapshot) => {
@@ -45,10 +45,14 @@ ref.on("child_added", async (snapshot) => {
   };
 
   try {
-    const response = await admin.messaging().sendToTopic("admin", payload);
+    const response = await admin.messaging().send({
+      topic: "admin",
+      ...payload
+    });
     console.log("✅ Notification sent:", response);
     await snapshot.ref.update({ notified: true });
   } catch (error) {
     console.error("❌ Error sending FCM:", error);
   }
+
 });
